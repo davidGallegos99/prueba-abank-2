@@ -1,0 +1,7 @@
+node_modules
+dist
+.angular
+.codegraph
+package-lock.json
+playwright-report
+test-results

@@ -1,0 +1,92 @@
+<header class="topbar">
+  <a class="brand" href="./" aria-label="MarketWatch Lite, inicio"
+    ><span class="brand-icon">↗</span> MarketWatch <span class="lite">LITE</span></a
+  >
+  <span class="currency">USD <span class="dot"></span></span>
+</header>
+<main>
+  <section class="intro">
+    <div>
+      <p class="eyebrow">TU PULSO DEL MERCADO</p>
+      <h1>El mercado, de un vistazo<span>.</span></h1>
+      <p class="subtitle">Explora, compara y sigue las criptomonedas que te interesan.</p>
+    </div>
+    <div class="sync">
+      <span class="status"
+        ><span class="dot" [class.offline]="store.error()"></span
+        >{{
+          store.loading()
+            ? 'Actualizando mercado'
+            : store.error()
+              ? 'Actualización pendiente'
+              : 'Actualización automática'
+        }}</span
+      ><small>
+        @if (store.updatedAt()) {
+          Última consulta {{ store.updatedAt() | date: 'HH:mm:ss' }}
+        } @else {
+          Cada 60 segundos
+        }
+      </small>
+    </div>
+  </section>
+  <app-market-summary [assets]="store.assets()" [favoriteCount]="store.favorites().length" />
+  @if (store.error()) {
+    <div class="notice" role="alert">
+      <div>
+        {{ store.error() }}
+        @if (store.assets().length) {
+          <small>Mostrando la última consulta exitosa.</small>
+        }
+      </div>
+      <button (click)="store.refresh()" [disabled]="store.loading()">Reintentar ↻</button>
+    </div>
+  }
+  @if (store.storageError()) {
+    <p class="notice" role="alert">{{ store.storageError() }}</p>
+  }
+  <section class="market-panel" aria-labelledby="market-title">
+    <div class="panel-heading">
+      <div>
+        <h2 id="market-title">Explorar mercado</h2>
+        <p>Los números cambian. Tu perspectiva cuenta.</p>
+      </div>
+      <button
+        class="refresh"
+        aria-label="Actualizar mercado"
+        (click)="store.refresh()"
+        [disabled]="store.loading()"
+      >
+        ↻ <span>Actualizar</span>
+      </button>
+    </div>
+    <app-market-filters
+      [filters]="store.filters()"
+      [resultCount]="store.visible().length"
+      (filtersChange)="store.updateFilters($event)"
+    />
+    <app-asset-list
+      [assets]="store.visible()"
+      [favorites]="store.favorites()"
+      [loading]="store.loading()"
+      [initialLoad]="!store.assets().length"
+      [loadFailed]="!!store.error() && !store.assets().length"
+      [favoritesOnly]="store.filters().favoritesOnly"
+      (favoriteToggle)="store.toggleFavorite($event)"
+      (assetSelected)="openDetail($event)"
+    />
+    <div class="panel-footer">
+      <span>Precios en dólares estadounidenses</span
+      ><a href="https://www.coingecko.com/" target="_blank" rel="noopener noreferrer"
+        >Datos de CoinGecko ↗</a
+      >
+    </div>
+  </section>
+  <footer></footer>
+</main>
+<app-asset-detail
+  [asset]="store.detailAsset()"
+  [favorite]="!!store.detailAsset() && store.favorites().includes(store.detailAsset()!.id)"
+  (favoriteToggle)="store.toggleFavorite($event)"
+  (closed)="store.selectAsset(null)"
+/>

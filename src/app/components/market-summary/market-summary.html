@@ -1,0 +1,24 @@
+<section class="metrics" aria-label="Resumen de los activos consultados">
+  <article>
+    <span>Activos en seguimiento</span
+    ><strong>{{ assets().length || '—' }}<span class="metric-icon">◈</span></strong
+    ><small>Principales por capitalización</small>
+  </article>
+  <article>
+    <span>Activos al alza · 24 h</span
+    ><strong>{{ assets().length ? gainers() : '—' }}<span class="metric-icon green">↗</span></strong
+    ><small>Entre los activos consultados</small>
+  </article>
+  <article>
+    <span>Volumen negociado · 24 h</span
+    ><strong
+      >{{ assets().length ? (volume() / 1000000000 | number: '1.2-2') : '—' }}
+      <span class="unit">mil M USD</span></strong
+    ><small>Suma de los activos consultados</small>
+  </article>
+  <article>
+    <span>Tu selección</span
+    ><strong>{{ favoriteCount() }}<span class="metric-icon gold">☆</span></strong
+    ><small>Favoritos guardados en este navegador</small>
+  </article>
+</section>

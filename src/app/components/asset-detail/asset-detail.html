@@ -1,0 +1,80 @@
+<dialog #detail aria-labelledby="detail-title" (close)="closed.emit()">
+  @if (asset(); as asset) {
+    <div class="dialog-heading">
+      <span class="eyebrow">DETALLE DEL ACTIVO</span
+      ><button aria-label="Cerrar detalle" (click)="closeDetail()">×</button>
+    </div>
+    <div class="dialog-asset">
+      <img [src]="asset.image" alt="" width="48" height="48" />
+      <div>
+        <h2 id="detail-title">{{ asset.name }}</h2>
+        <span>{{ asset.symbol | uppercase }} · Puesto {{ asset.market_cap_rank ?? '—' }}</span>
+      </div>
+    </div>
+    <p class="dialog-price">
+      {{
+        asset.current_price === null
+          ? '—'
+          : (asset.current_price | currency: 'USD' : 'symbol' : '1.2-8')
+      }}
+    </p>
+    <app-change [value]="asset.price_change_percentage_24h" />
+    <dl>
+      <div>
+        <dt>Capitalización</dt>
+        <dd>
+          {{
+            asset.market_cap === null
+              ? '—'
+              : (asset.market_cap | currency: 'USD' : 'symbol' : '1.0-0')
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>Volumen · 24 h</dt>
+        <dd>
+          {{
+            asset.total_volume === null
+              ? '—'
+              : (asset.total_volume | currency: 'USD' : 'symbol' : '1.0-0')
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>Máximo · 24 h</dt>
+        <dd>
+          {{
+            asset.high_24h === null ? '—' : (asset.high_24h | currency: 'USD' : 'symbol' : '1.2-8')
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>Mínimo · 24 h</dt>
+        <dd>
+          {{
+            asset.low_24h === null ? '—' : (asset.low_24h | currency: 'USD' : 'symbol' : '1.2-8')
+          }}
+        </dd>
+      </div>
+      <div>
+        <dt>Oferta circulante</dt>
+        <dd>
+          {{
+            asset.circulating_supply === null ? '—' : (asset.circulating_supply | number: '1.0-0')
+          }}
+          {{ asset.symbol | uppercase }}
+        </dd>
+      </div>
+    </dl>
+    <button
+      class="dialog-favorite"
+      [attr.aria-pressed]="favorite()"
+      (click)="favoriteToggle.emit(asset.id)"
+    >
+      {{ favorite() ? '★ Quitar de favoritos' : '☆ Agregar a favoritos' }}
+    </button>
+    <small class="dialog-time"
+      >Dato del proveedor: {{ asset.last_updated | date: 'dd/MM/yyyy HH:mm:ss' }}</small
+    >
+  }
+</dialog>

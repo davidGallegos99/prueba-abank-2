@@ -1,0 +1,67 @@
+<div class="table-head" aria-hidden="true">
+  <span></span><span>ACTIVO</span><span>PRECIO</span><span>CAMBIO 24 H</span
+  ><span>CAPITALIZACIÓN</span><span></span>
+</div>
+<div class="asset-list" [attr.aria-busy]="loading()">
+  @if (loading() && initialLoad()) {
+    <span class="sr-only" role="status">Cargando activos…</span>
+    @for (item of skeletons; track item) {
+      <div class="skeleton-row" aria-hidden="true"><span></span><span></span><span></span></div>
+    }
+  } @else {
+    @for (asset of assets(); track asset.id) {
+      <article class="asset-row" [class.is-favorite]="favorites().includes(asset.id)">
+        <button
+          class="star"
+          [class.saved]="favorites().includes(asset.id)"
+          [attr.aria-label]="
+            (favorites().includes(asset.id) ? 'Quitar de favoritos: ' : 'Agregar a favoritos: ') +
+            asset.name
+          "
+          [attr.aria-pressed]="favorites().includes(asset.id)"
+          (click)="favoriteToggle.emit(asset.id)"
+        >
+          {{ favorites().includes(asset.id) ? '★' : '☆' }}
+        </button>
+        <button class="asset-link" (click)="assetSelected.emit(asset)">
+          <img [src]="asset.image" alt="" width="36" height="36" loading="lazy" /><span
+            ><strong>{{ asset.name }}</strong
+            ><small>{{ asset.symbol | uppercase }}</small></span
+          >
+        </button>
+        <strong class="price">{{
+          asset.current_price === null
+            ? '—'
+            : (asset.current_price | currency: 'USD' : 'symbol' : '1.2-8')
+        }}</strong>
+        <app-change [value]="asset.price_change_percentage_24h" />
+        <span class="cap">{{
+          asset.market_cap === null
+            ? '—'
+            : (asset.market_cap | currency: 'USD' : 'symbol' : '1.0-0')
+        }}</span>
+        <button
+          class="detail-arrow"
+          (click)="assetSelected.emit(asset)"
+          [attr.aria-label]="'Ver detalle de ' + asset.name"
+        >
+          ↗
+        </button>
+      </article>
+    } @empty {
+      <div class="empty">
+        <span>⌕</span>
+        <h3>
+          {{ favoritesOnly() ? 'No hay favoritos con estos filtros' : 'No encontramos activos' }}
+        </h3>
+        <p>
+          {{
+            loadFailed()
+              ? 'Reintenta la consulta para cargar el mercado.'
+              : 'Prueba otra búsqueda o ajusta los filtros.'
+          }}
+        </p>
+      </div>
+    }
+  }
+</div>

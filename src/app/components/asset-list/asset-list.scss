@@ -1,0 +1,158 @@
+:host {
+  display: block;
+}
+.table-head {
+  display: none;
+}
+.asset-row {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 10px 6px;
+  padding: 17px 12px;
+  align-items: center;
+  border-bottom: 1px solid #eef0f2;
+}
+.asset-row:hover {
+  background: #fafcf8;
+}
+.asset-row.is-favorite {
+  border-left: 3px solid #c9f36c;
+  padding-left: 9px;
+}
+.star {
+  border: 0;
+  background: none;
+  font-size: 23px;
+  color: #91999f;
+  padding: 0;
+}
+.star.saved {
+  color: #ab8219;
+}
+.asset-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  border: 0;
+  background: none;
+  padding: 0;
+  min-width: 0;
+}
+.asset-link img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+.asset-link strong {
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.asset-link small {
+  display: block;
+  color: #889298;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.price {
+  font-size: 12px;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+app-change {
+  grid-column: 3;
+  text-align: right;
+}
+.cap,
+.detail-arrow {
+  display: none;
+}
+.empty {
+  padding: 60px 20px;
+  text-align: center;
+}
+.empty > span {
+  font-size: 40px;
+  color: #8e9b83;
+}
+.empty h3 {
+  margin: 12px 0;
+  font-size: 17px;
+}
+.empty p {
+  color: #7a8389;
+  font-size: 13px;
+}
+.skeleton-row {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  border-bottom: 1px solid #eef0f2;
+}
+.skeleton-row span {
+  height: 20px;
+  width: 25%;
+  background: #edf0f2;
+  border-radius: 6px;
+  animation: pulse 1.2s infinite alternate;
+}
+.skeleton-row span:first-child {
+  width: 40%;
+}
+@keyframes pulse {
+  to {
+    opacity: 0.4;
+  }
+}
+@media (min-width: 900px) {
+  .table-head,
+  .asset-row {
+    display: grid;
+    grid-template-columns:
+      30px minmax(110px, 1.4fr) minmax(90px, 1fr) 90px minmax(100px, 1fr)
+      24px;
+    gap: 12px;
+    padding: 18px 24px;
+  }
+  .table-head {
+    background: #fafbfc;
+    color: #7a858d;
+    font-size: 9px;
+    letter-spacing: 0.6px;
+  }
+  .table-head > span:nth-child(n + 3) {
+    text-align: right;
+  }
+  .asset-row.is-favorite {
+    padding-left: 21px;
+  }
+  .asset-link img {
+    width: 36px;
+    height: 36px;
+  }
+  .asset-link strong,
+  .price {
+    font-size: 13px;
+  }
+  app-change {
+    grid-column: auto;
+  }
+  .cap {
+    display: block;
+    text-align: right;
+    font-size: 12px;
+    color: #657078;
+  }
+  .detail-arrow {
+    display: block;
+    border: 0;
+    color: #8a969c;
+    background: none;
+    font-size: 19px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-row span {
+    animation: none;
+  }
+}

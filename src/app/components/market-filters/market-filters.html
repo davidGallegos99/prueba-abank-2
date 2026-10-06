@@ -1,0 +1,68 @@
+<div class="toolbar">
+  <label class="search"
+    ><span aria-hidden="true">⌕</span
+    ><input
+      type="search"
+      aria-label="Buscar por nombre o símbolo"
+      placeholder="Buscar nombre o símbolo…"
+      [ngModel]="filters().query"
+      (ngModelChange)="filtersChange.emit({ query: $event })"
+  /></label>
+  <button
+    class="favorites-filter"
+    [class.active]="filters().favoritesOnly"
+    [attr.aria-pressed]="filters().favoritesOnly"
+    (click)="filtersChange.emit({ favoritesOnly: !filters().favoritesOnly })"
+  >
+    ☆ Solo favoritos
+  </button>
+  <label class="sort"
+    >Ordenar por<select
+      aria-label="Ordenar activos"
+      [ngModel]="filters().sort"
+      (ngModelChange)="filtersChange.emit({ sort: $event })"
+    >
+      <option value="market_cap_rank:asc">Capitalización</option>
+      <option value="current_price:asc">Precio: menor a mayor</option>
+      <option value="current_price:desc">Precio: mayor a menor</option>
+      <option value="price_change_percentage_24h:asc">Variación: menor a mayor</option>
+      <option value="price_change_percentage_24h:desc">Variación: mayor a menor</option>
+    </select></label
+  >
+</div>
+<div class="filters">
+  <label
+    >Variación 24 h<select
+      aria-label="Variación 24 h"
+      [ngModel]="filters().movement"
+      (ngModelChange)="filtersChange.emit({ movement: $event })"
+    >
+      <option value="all">Todos los movimientos</option>
+      <option value="up">Al alza</option>
+      <option value="down">A la baja</option>
+    </select></label
+  ><label
+    >Precio mín. (USD)<input
+      type="number"
+      min="0"
+      placeholder="Sin mínimo"
+      [ngModel]="filters().minimum"
+      (ngModelChange)="filtersChange.emit({ minimum: $event })" /></label
+  ><label
+    >Precio máx. (USD)<input
+      type="number"
+      min="0"
+      placeholder="Sin máximo"
+      [ngModel]="filters().maximum"
+      (ngModelChange)="filtersChange.emit({ maximum: $event })" /></label
+  ><span class="results" aria-live="polite">{{ resultCount() }} activos</span>
+</div>
+@if (
+  filters().minimum !== null &&
+  filters().maximum !== null &&
+  filters().minimum! > filters().maximum!
+) {
+  <p class="range-warning" role="status">
+    El precio mínimo supera al máximo. Ajusta el rango para ver resultados.
+  </p>
+}
